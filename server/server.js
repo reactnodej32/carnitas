@@ -22,9 +22,15 @@ app.use(
 app.use(bodyParser.json());
 
 // mongodb connection
+//mongodb://127.0.0.1:27017/carna
+//mongodb+srv://123:<password>@cluster0.hfqzm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+/*
+Recently as of May 12 Mongodb has been having issues so resort to local database
+https://zellwk.com/blog/local-mongodb/
+*/
 mongoose
   .connect(
-    "mongodb+srv://123:123@cluster0.hfqzm.mongodb.net/carna?retryWrites=true&w=majority",
+    "mongodb+srv://123:EbyffDMsHzuUx7AL@cluster0.hfqzm.mongodb.net/carna?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -33,6 +39,8 @@ mongoose
   .then(() => console.log("MongoDB successfully connected"))
   .catch((err) => console.log(err));
 
+//To fix deprecation  warning
+mongoose.set("useFindAndModify", false);
 // Passport middleware
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(passport.initialize());

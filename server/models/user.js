@@ -18,6 +18,21 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  group: {
+    type: Array,
+    required: false,
+    default: [],
+  },
+  course: {
+    type: Array,
+    required: false,
+    default: [],
+  },
+  motto: {
+    type: String,
+    required: false,
+    default: "An admin can update my motto",
+  },
   date: {
     type: Date,
     default: Date.now,

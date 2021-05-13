@@ -5,9 +5,11 @@ const Admin = mongoose.model("admin");
 const User = mongoose.model("user");
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+//super secret key that we can use for now...
 opts.secretOrKey = "secret";
 
 module.exports = (passport) => {
+  //passport for admin only
   passport.use(
     "admin",
     new JwtStrategy(opts, (jwt_payload, done) => {
@@ -21,6 +23,7 @@ module.exports = (passport) => {
         .catch((err) => console.log(err));
     })
   );
+  //passport for users only
   passport.use(
     "user",
     new JwtStrategy(opts, (jwt_payload, done) => {

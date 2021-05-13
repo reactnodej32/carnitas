@@ -8,6 +8,10 @@ const Admin = require("../models/admin");
 
 router.use(express.json());
 
+/*
+Admin registration/login
+*/
+
 router.post("/register", (req, res) => {
   Admin.findOne({ email: req.body.email }).then((admin) => {
     if (admin) {

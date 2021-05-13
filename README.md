@@ -1,9 +1,9 @@
-How to start the app
+Installation:
 
-cd server -> npm i -> npm start
+If you get a node-sass error from react switch your node version to v12.18.2
 
-cd mobile -> npm i -> npm start
+https://nodejs.org/download/release/v12.18.2/
 
-cd client -> npm i -> npm start
+Otherwise do
 
-Done =)
+`npm start`

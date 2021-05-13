@@ -1,0 +1,22 @@
+{
+  "name": "carnitas",
+  "version": "1.0.0",
+  "description": "How to start the app",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd client && npm install && cd ../server && npm install && cd ../ && npm install && concurrently \"cd client && npm run start\" \"cd server && npm run start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reactnodej32/carnitas.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reactnodej32/carnitas/issues"
+  },
+  "homepage": "https://github.com/reactnodej32/carnitas#readme",
+  "dependencies": {
+    "concurrently": "^6.1.0"
+  }
+}
