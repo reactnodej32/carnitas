@@ -8,6 +8,7 @@ const INITIAL_STATE = {
 const adminReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case AdminActionTypes.SIGN_IN_SUCCESS:
+      console.log(action.payload);
       return {
         ...state,
         currentAdmin: action.payload,

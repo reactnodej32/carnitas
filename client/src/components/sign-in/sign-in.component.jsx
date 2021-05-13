@@ -52,7 +52,7 @@ const SignIn = ({ setShowSignup, signInStart }) => {
             color={"white"}
             margin={"10px"}
             onClickFunctionProp={() => {
-              signInStart("test@test.com", "123456");
+              signInStart("easyrun32@gmail.com", "123");
             }}
           >
             Demo

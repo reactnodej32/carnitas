@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import PrivateRoute from "./components/private-route/private-route.component";
 import "./app.styles.scss";
 
-// import { checkUserSession } from "./redux/user/user.actions";
+import { checkAdminToken } from "./redux/admin/admin.action";
 
 const Authentication = lazy(() =>
   import("./pages/authentication/authentication.component")
@@ -18,10 +18,10 @@ const AdminDashboard = lazy(() =>
   import("./pages/admin-dashboard/admin-dashboard.component")
 );
 
-const App = ({ checkUserSession, currentAdmin }) => {
-  // useEffect(() => {
-  //   checkUserSession();
-  // }, [checkUserSession]);
+const App = ({ checkAdminToken, currentAdmin }) => {
+  useEffect(() => {
+    checkAdminToken();
+  }, [checkAdminToken]);
 
   return (
     <div className="App">
@@ -29,18 +29,13 @@ const App = ({ checkUserSession, currentAdmin }) => {
         <Suspense fallback={<Spinner />}>
           <PrivateRoute path="/admin" component={AdminDashboard} />
 
-          {/* <Route
+          <Route
             exact
             path="/"
             render={() =>
-              currentAdmin ? (
-                <Redirect to="/missioncontrol" />
-              ) : (
-                <Authentication />
-              )
+              currentAdmin ? <Redirect to="/admin" /> : <Authentication />
             }
-          /> */}
-          <Authentication />
+          />
         </Suspense>
       </Switch>
     </div>
@@ -51,6 +46,6 @@ const mapStateToProps = (state) => ({
   currentAdmin: state.admin.currentAdmin,
 });
 const mapDispatchToProps = (dispatch) => ({
-  // checkUserSession: () => dispatch(checkUserSession()),
+  checkAdminToken: () => dispatch(checkAdminToken()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(App);
