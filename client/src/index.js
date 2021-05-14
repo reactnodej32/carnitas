@@ -15,11 +15,9 @@ import "./index.styles.scss";
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <React.StrictMode>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </PersistGate>
   </Provider>,
   document.getElementById("root")

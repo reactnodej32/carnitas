@@ -1,0 +1,12 @@
+.users {
+  width: 700px;
+  height: 400px;
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: space-around;
+  @media screen and (max-width: 960px) {
+    height: 400px;
+    width: 300px;
+  }
+}

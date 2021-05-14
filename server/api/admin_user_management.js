@@ -21,7 +21,7 @@ router.post(
   (req, res) => {
     User.findOne({ email: req.body.email }).then((user) => {
       // if user exist don't make anything
-      if (user) return res.status(400).json({ email: "User Alread exist" });
+      if (user) return res.status(400).json({ email: "User Already Exist" });
       const newUser = new User({
         username: req.body.username,
         name: req.body.name,

@@ -29,8 +29,6 @@ export const useStyles = makeStyles((theme) => ({
     background: "unset",
 
     [theme.breakpoints.up("sm")]: {
-      justifyContent: "center",
-      alignItems: "center",
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
@@ -52,6 +50,10 @@ export const useStyles = makeStyles((theme) => ({
   },
   //text
   content: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#66a4ff",
     flexGrow: 1,
     padding: theme.spacing(3),
