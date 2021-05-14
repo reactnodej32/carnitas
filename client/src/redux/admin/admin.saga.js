@@ -6,22 +6,32 @@ import {
   setAuthToken,
   checkAdminToken,
 } from "./admin.utlis";
-import { signInSuccess } from "./admin.action";
+import {
+  signInSuccess,
+  removeCurrentAdmin,
+  signOutSuccess,
+  signUpFalure,
+  signUpSuccess,
+} from "./admin.action";
 export function* signUp({ payload: { email, password, displayName } }) {
   try {
-    const credentials = yield registerAdmin({
+    const {
+      data: { token },
+    } = yield call(registerAdmin, {
       name: displayName,
       email: email,
       password: password,
     });
-  } catch (err) {
-    console.log(err);
+
+    yield put(signUpSuccess(token));
+  } catch ({ response: { data } }) {
+    yield put(signUpFalure(data));
   }
 }
 
 export function* signOut() {
-  console.log("signOut");
-  yield;
+  yield call(setAuthToken, false);
+  yield put(signOutSuccess());
 }
 
 export function* signIn({ payload: { email, password } }) {
@@ -37,9 +47,9 @@ export function* signIn({ payload: { email, password } }) {
 export function* isAdminAuthenticated() {
   const admin_token = yield call(checkAdminToken);
   if (admin_token) {
-    console.log("Token !", admin_token);
+    yield put(signInSuccess(admin_token));
   } else {
-    console.log("no token");
+    yield put(removeCurrentAdmin());
   }
 }
 

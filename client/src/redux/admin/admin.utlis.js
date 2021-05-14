@@ -1,13 +1,15 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 export const setAuthToken = (token) => {
-  localStorage.setItem("adminToken", JSON.stringify(token));
   if (token) {
+    localStorage.setItem("adminToken", JSON.stringify(token));
     // Apply authorization token to every request if logged in
     axios.defaults.headers.common["Authorization"] = token;
   } else {
+    localStorage.removeItem("adminToken");
     // Delete auth header
     delete axios.defaults.headers.common["Authorization"];
+    return;
   }
   return jwt_decode(token);
 };
@@ -24,7 +26,7 @@ export const checkAdminToken = () => {
 };
 
 export const registerAdmin = (credentials) => {
-  return axios.post("/api/admin/register", credentials).then((res) => res.data);
+  return axios.post("/api/admin/register", credentials);
 };
 
 export const loginAdmin = (credentials) => {

@@ -12,29 +12,37 @@ router.use(express.json());
 Admin registration/login
 */
 
-router.post("/register", (req, res) => {
-  Admin.findOne({ email: req.body.email }).then((admin) => {
-    if (admin) {
-      return res.status(400).json({ email: "Email already exists" });
-    } else {
-      const newAdmin = new Admin({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-      });
+router.post("/register", async (req, res) => {
+  const admin = await Admin.findOne({ email: req.body.email });
+  //if admin exist then throw an error
+  if (admin) return res.status(401).json({ email: "Email already exists" });
 
-      // Hash password before saving in database
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newAdmin.password, salt, (err, hash) => {
-          if (err) throw err;
-          newAdmin.password = hash;
-          newAdmin
-            .save()
-            .then((admin) => res.json(admin))
-            .catch((err) => console.log(err));
-        });
-      });
-    }
+  const newAdmin = new Admin({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  // Hash password before saving in database
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newAdmin.password, salt, async (err, hash) => {
+      if (err) throw err;
+      newAdmin.password = hash;
+      const admin = await newAdmin.save();
+      jwt.sign(
+        { id: admin._id, name: admin.name, email: admin.email },
+        "secret",
+        {
+          expiresIn: 31556926, // 1 year in seconds
+        },
+        (err, token) => {
+          res.json({
+            success: true,
+            token: "Bearer " + token,
+          });
+        }
+      );
+    });
   });
 });
 
@@ -44,7 +52,7 @@ router.post("/login", (req, res) => {
 
   // Find admin by email
   Admin.findOne({ email }).then((admin) => {
-    // Check if admin exists
+    // If admin doesn't exist then don't sign them in
     if (!admin) {
       return res.status(404).json({ emailnotfound: "Email not found" });
     }
