@@ -29,3 +29,7 @@ export const fetchGroup = () => {
 export const fetchCreateGroup = (group) => {
   return axios.post("/api/admin/creategroup", { name: group });
 };
+
+export const fetchChangePrivilege = (email) => {
+  return axios.post("/api/admin/privileges", { email: email });
+};

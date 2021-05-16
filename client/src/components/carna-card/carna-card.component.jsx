@@ -34,8 +34,10 @@ export const CarnaCard = ({
   operation = () => {
     console.log("hello world");
   },
+  operation2 = () => {},
   topclick = () => {},
   dom_form = null,
+  button2 = false,
   ...otherprops
 }) => {
   const classes = useStyles();
@@ -76,17 +78,32 @@ export const CarnaCard = ({
 
       <CardActions>
         {text ? (
-          <CustomButton
-            color={"white"}
-            onClickFunctionProp={() => {
-              operation(form ? "something else" : otherprops.email);
-            }}
-            height={"20px"}
-            width={"50px"}
-            margin={"5px"}
-          >
-            {text}
-          </CustomButton>
+          <div style={{ display: "flex" }}>
+            <CustomButton
+              color={"white"}
+              onClickFunctionProp={() => {
+                operation(otherprops.email);
+              }}
+              height={"20px"}
+              width={"50px"}
+              margin={"5px"}
+            >
+              {text}
+            </CustomButton>
+            {button2 ? (
+              <CustomButton
+                onClickFunctionProp={() => {
+                  operation2(otherprops.email);
+                }}
+                color={otherprops.join_course_privilege ? "white" : "red"}
+                height={"20px"}
+                width={"80px"}
+                margin={"5px"}
+              >
+                {button2}
+              </CustomButton>
+            ) : null}
+          </div>
         ) : null}
       </CardActions>
     </Card>

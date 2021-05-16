@@ -23,6 +23,11 @@ const UserSchema = new Schema({
     required: false,
     default: [],
   },
+  join_course_privilege: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
   course: {
     type: Array,
     required: false,

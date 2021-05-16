@@ -30,7 +30,10 @@ export const Home = ({ searchUser }) => {
     <div className="home">
       <div className="form">
         <form onSubmit={handleSubmit}>
-          <h2>My Users </h2>
+          <h2>
+            Revoke a user from joining a course,
+            <br /> Add, Delete, <br /> Or Search for a User{" "}
+          </h2>
 
           <FormInput
             type="user"

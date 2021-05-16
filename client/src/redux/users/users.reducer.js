@@ -66,6 +66,17 @@ const usersReducer = (state = INITIAL_STATE, action) => {
         ...state,
         users_group: [...state.users_group, action.payload],
       };
+    case UsersActionTypes.SET_PRIVILEGE:
+      let newPriviledgeUsers = [...state.users_api];
+      newPriviledgeUsers = newPriviledgeUsers.map((user) =>
+        user._id === action.payload._id ? action.payload : user
+      );
+
+      return {
+        ...state,
+        users_api: newPriviledgeUsers,
+        users_collection: newPriviledgeUsers,
+      };
     default:
       return state;
   }

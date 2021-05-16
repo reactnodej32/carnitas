@@ -13,6 +13,7 @@ const Course = require("../models/course");
  * A admin can view all user with /users
  * A admin can find one user /finduser
  * A admin can create a group  /creategroup
+ 
  */
 
 router.post(
@@ -166,6 +167,25 @@ router.get(
         if (!course) return res.status(400).send([]);
         res.status(200).send(course);
       });
+  }
+);
+//revoke/enable privileges
+
+router.post(
+  "/privileges",
+  passport.authenticate("admin", { session: false }),
+  async (req, res) => {
+    const { join_course_privilege } = await User.findOne({
+      email: req.body.email,
+    });
+
+    const user = await User.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: { join_course_privilege: !join_course_privilege } },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json(user);
   }
 );
 

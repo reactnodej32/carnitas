@@ -62,3 +62,13 @@ export const setCreatedGroup = (created_group) => ({
   type: UsersActionTypes.SET_CREATED_GROUP,
   payload: created_group,
 });
+//CHANGE PRIVILEGE
+export const changePrivilege = (user) => ({
+  type: UsersActionTypes.CHANGE_PRIVILEGE,
+  payload: user,
+});
+
+export const setPrivilege = (changed_user) => ({
+  type: UsersActionTypes.SET_PRIVILEGE,
+  payload: changed_user,
+});

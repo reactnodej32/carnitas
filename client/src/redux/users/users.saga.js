@@ -7,6 +7,7 @@ import {
   fetchModifyUser,
   fetchGroup,
   fetchCreateGroup,
+  fetchChangePrivilege,
 } from "./users.utlis";
 import {
   setUsers,
@@ -15,6 +16,7 @@ import {
   setModifyUser,
   setGroup,
   setCreatedGroup,
+  setPrivilege,
 } from "./users.action";
 export function* getUsers() {
   try {
@@ -69,6 +71,14 @@ export function* createGroup({ payload }) {
     console.log(error.response);
   }
 }
+export function* changePrivilege({ payload }) {
+  try {
+    const { data } = yield call(fetchChangePrivilege, payload);
+    yield put(setPrivilege(data));
+  } catch (error) {
+    console.log(error.response);
+  }
+}
 
 export function* onHome() {
   yield takeLatest(UsersActionTypes.GET_USERS, getUsers);
@@ -93,7 +103,9 @@ export function* onGetGroup() {
 export function* onCreateGroup() {
   yield takeLatest(UsersActionTypes.CREATE_GROUP, createGroup);
 }
-
+export function* onPrivilege() {
+  yield takeLatest(UsersActionTypes.CHANGE_PRIVILEGE, changePrivilege);
+}
 export function* usersSagas() {
   yield all([
     call(onHome),
@@ -102,5 +114,6 @@ export function* usersSagas() {
     call(onModifyUser),
     call(onGetGroup),
     call(onCreateGroup),
+    call(onPrivilege),
   ]);
 }

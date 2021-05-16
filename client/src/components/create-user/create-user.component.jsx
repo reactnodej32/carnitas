@@ -3,6 +3,12 @@ import CarnaCard from "../carna-card/carna-card.component";
 import FormInput from "../form-input/form-input.component";
 import { createUser } from "../../redux/users/users.action";
 import { connect } from "react-redux";
+
+const initialState = {
+  displayName: "",
+  email: "",
+  password: "",
+};
 export const CreateUser = ({ createUser }) => {
   const [userCredentials, setUserCredentials] = useState({
     displayName: "",
@@ -19,9 +25,11 @@ export const CreateUser = ({ createUser }) => {
     event.preventDefault();
 
     createUser(userCredentials);
+    setUserCredentials(initialState);
   };
   const buttonSubmit = () => {
     createUser(userCredentials);
+    setUserCredentials(initialState);
   };
   let dom_form = (
     <div
