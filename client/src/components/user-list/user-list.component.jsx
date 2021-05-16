@@ -1,16 +1,30 @@
 import React, { useEffect } from "react";
-import UserCard from "../user-card/user-card.component";
+import CarnaCard from "../carna-card/carna-card.component";
 import { getUsers } from "../../redux/users/users.action";
+import { chosenDeleteUser } from "../../redux/users/users.action";
 import { connect } from "react-redux";
 import "./user-list.styles.scss";
-export const UserList = ({ getUsers, users_collection }) => {
+export const UserList = ({
+  getUsers,
+  users_collection,
+  chosenDeleteUser,
+  CreateUser = false, // component
+}) => {
   useEffect(() => {
     getUsers();
   }, [getUsers]);
   return (
     <div className="users">
-      {users_collection.map((user, i) => (
-        <UserCard user={user} key={user._id} />
+      {CreateUser ? <CreateUser /> : null}
+      {users_collection.map(({ _id, name, motto, email }, i) => (
+        <CarnaCard
+          top={name}
+          middle={motto}
+          key={_id}
+          email={email}
+          operation={chosenDeleteUser}
+          text={"delete"}
+        />
       ))}
     </div>
   );
@@ -20,5 +34,6 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   getUsers: () => dispatch(getUsers()),
+  chosenDeleteUser: (chosen_user) => dispatch(chosenDeleteUser(chosen_user)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(UserList);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-//Material ui stuff
+//Material ui
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
@@ -17,11 +17,13 @@ import CreateIcon from "@material-ui/icons/Create";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
+import PeopleIcon from "@material-ui/icons/People";
 import { useTheme } from "@material-ui/core/styles";
 //My components
 import Home from "../../components/home/home.component";
 import ModifyUser from "../../components/modify-user/modify-user.component";
 import CreateCourse from "../../components/create-course/create-course.component";
+import CreateGroup from "../../components/create-group/create-group.component";
 //img
 import carna from "./carna.png";
 //actions
@@ -36,6 +38,7 @@ function ResponsiveDrawer(props) {
     home: true,
     modify_user: false,
     create_course: false,
+    create_group: false,
   });
 
   const { window, signOutStart } = props;
@@ -93,6 +96,19 @@ function ResponsiveDrawer(props) {
             <MenuBookIcon />
           </ListItemIcon>
           <ListItemText primary={"CREATE COURSE"} />
+        </ListItem>
+      </List>
+
+      <List>
+        <ListItem
+          button
+          key={"CREATE GROUP"}
+          onClick={() => filterPage("create_group")}
+        >
+          <ListItemIcon>
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText primary={"CREATE GROUP"} />
         </ListItem>
       </List>
 
@@ -170,6 +186,7 @@ function ResponsiveDrawer(props) {
         {page.home ? <Home /> : null}
         {page.modify_user ? <ModifyUser /> : null}
         {page.create_course ? <CreateCourse /> : null}
+        {page.create_group ? <CreateGroup /> : null}
       </main>
     </div>
   );

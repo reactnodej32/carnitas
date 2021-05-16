@@ -1,38 +1,37 @@
 import React, { useState, useEffect } from "react";
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import { createCourse, getCourse } from "../../redux/course/course.action";
+import { getGroup, createGroup } from "../../redux/users/users.action";
 import CarnaCard from "../carna-card/carna-card.component";
 import { connect } from "react-redux";
-export const CreateCourse = ({ createCourse, getCourse, courses }) => {
-  const [created_course, setCourse] = useState({
-    course: "",
-  });
-  const { course } = created_course;
+export const CreateGroup = ({ getGroup, users_group, createGroup }) => {
+  const [createdGroup, setGroup] = useState({ group: "" });
+  const { group } = createdGroup;
 
   useEffect(() => {
-    getCourse();
-  }, [getCourse]);
+    getGroup();
+  }, [getGroup]);
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setCourse({ ...created_course, [name]: value });
+    setGroup({ ...createdGroup, [name]: value });
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    createCourse(course);
+    createGroup(group);
   };
+
   return (
     <div className="home">
-      <h2>Create a course</h2>
+      <h2>Create a group</h2>
       <form onSubmit={handleSubmit}>
         <FormInput
           type="text"
-          name="course"
-          value={course}
+          name="group"
+          value={group}
           onChange={handleChange}
-          label="type to create a course"
+          label="type to create a group"
           required
         />
         <CustomButton onClick={handleSubmit} height={"20px"}>
@@ -40,18 +39,18 @@ export const CreateCourse = ({ createCourse, getCourse, courses }) => {
         </CustomButton>
       </form>
       <div className="users">
-        {courses.map(({ name, stuff, _id }) => (
-          <CarnaCard top={name} middle={stuff} key={_id} />
+        {users_group.map(({ name, date, _id }, i) => (
+          <CarnaCard top={name} middle={date} key={_id} />
         ))}
       </div>
     </div>
   );
 };
 const mapStateToProps = (state) => ({
-  courses: state.course.courses,
+  users_group: state.users.users_group,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createCourse: (created_course) => dispatch(createCourse(created_course)),
-  getCourse: () => dispatch(getCourse()),
+  getGroup: () => dispatch(getGroup()),
+  createGroup: (created_group) => dispatch(createGroup(created_group)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(CreateCourse);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateGroup);

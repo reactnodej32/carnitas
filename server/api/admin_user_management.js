@@ -68,7 +68,7 @@ router.put(
     User.findOneAndUpdate(
       { email: req.body.email },
       { $set: { motto: req.body.motto } },
-      { upsert: true }
+      { upsert: true, new: true }
     ).then((user) => {
       if (!user) return res.status(400).json({ exist: false });
       res.status(200).json(user);

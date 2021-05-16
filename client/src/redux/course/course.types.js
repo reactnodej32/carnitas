@@ -1,0 +1,9 @@
+const CourseActionTypes = {
+  //CREATE/SET COURSE
+  CREATE_COURSE: "CREATE_COURSE",
+  SET_CREATED_COURSE: "SET_CREATED_COURSE",
+  //GET/SET COURSE
+  GET_COURSE: "GET_COURSE",
+  SET_COURSE: "SET_COURSE",
+};
+export default CourseActionTypes;

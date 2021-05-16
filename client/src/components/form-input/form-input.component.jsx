@@ -1,9 +1,19 @@
 import React from "react";
 import "./form-input-styles.scss";
 
-export const FormInput = ({ label, onChange, ...otherProps }) => (
+export const FormInput = ({
+  label,
+  onChange,
+  margin = false,
+  ...otherProps
+}) => (
   <div className="group">
-    <input className="form-input" onChange={onChange} {...otherProps} />
+    <input
+      style={margin ? { margin: "0px" } : {}}
+      className="form-input"
+      onChange={onChange}
+      {...otherProps}
+    />
     {label ? (
       <label
         className={`${
