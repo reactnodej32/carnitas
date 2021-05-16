@@ -4,7 +4,9 @@
   "description": "How to start the app",
   "main": "index.js",
   "scripts": {
-    "start": "cd client && npm install && cd ../server && npm install && cd ../ && npm install && concurrently \"cd client && npm run start\" \"cd server && npm run start\""
+    "start": "node ./server/server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "compile": "cd client && npm install && cd ../server && npm install && cd ../ && npm install && concurrently \"cd client && npm run start\" \"cd server && npm run start\""
   },
   "repository": {
     "type": "git",

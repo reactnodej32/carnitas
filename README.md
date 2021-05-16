@@ -6,4 +6,4 @@ https://nodejs.org/download/release/v12.18.2/
 
 Otherwise do
 
-`npm start`
+`npm run compile`
