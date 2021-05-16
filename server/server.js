@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const path = require("path");
 const bodyParser = require("body-parser");
+if (process.env.NODE_ENV !== "production") require("dotenv").config();
 // importing api
 const admin = require("./api/admin");
 const admin_user_management = require("./api/admin_user_management");
@@ -26,7 +27,11 @@ app.use(bodyParser.json());
 //mongodb+srv://123:<password>@cluster0.hfqzm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 /*
 Recently as of May 12 Mongodb has been having issues so resort to local database
-https://zellwk.com/blog/local-mongodb/
+https://zellwk.com/blog/local-mongodb/ <- link tutorial
+
+if you already have mongo in your computer
+Please use this string 
+"mongodb://127.0.0.1:27017/carna"
 */
 mongoose
   .connect(
@@ -52,6 +57,15 @@ app.use("/api/admin", admin);
 app.use("/api/admin", admin_user_management);
 app.use("/api/user", user);
 app.use("/api/user", usercrud);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  });
+}
+
 app.listen(8080, () => {
   console.log("server running " + 8080);
 });
