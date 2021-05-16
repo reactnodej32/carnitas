@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const path = require("path");
 const bodyParser = require("body-parser");
+
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 // importing api
 const admin = require("./api/admin");
@@ -12,6 +13,7 @@ const user = require("./api/user");
 const usercrud = require("./api/user-crud");
 // setup
 const app = express();
+const port = process.env.PORT || 8080;
 app.use(cors());
 
 // body parser middleware
@@ -66,6 +68,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.listen(8080, () => {
-  console.log("server running " + 8080);
+app.listen(port, () => {
+  console.log("server running " + port);
 });
