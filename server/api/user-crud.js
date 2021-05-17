@@ -84,22 +84,26 @@ router.post("/joincourse/:id", async (req, res) => {
   // RETURN THE COURSE TO UPDATE THE USERS COURSES
   return res.status(200).send(course);
 });
-
-router.get(
+//requires user object which holds the user's courses
+router.post(
   "/mycourses",
   passport.authenticate("user", { session: false }),
   async (req, res) => {
+    //users has courses such as {user:"bryan", courses:['123812saubd', '1293213912']}
+    //courses array will be used to get the users courses
     const user = req.body.user;
-
+    //if there are no course return nothing
     if (user.course.length === 0) return res.status(200).send([]);
-
+    //if courses are in the array then go find the courses by id
     let users_course = await user.course.map(async (course_id, index) => {
       const database_course = await Course.findById(course_id);
       return database_course;
     });
+    //since it's finding muliple courses and storing them in a promise array
+    // then we want to reveal all the promsis and send them to the user,
+
     Promise.all(users_course).then((data) => {
-      // res.status(200).json;
-      console.log(data);
+      res.status(200).json(data);
     });
   }
 );

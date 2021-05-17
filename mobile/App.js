@@ -18,6 +18,7 @@ export const App = () => {
     </NativeRouter>
   );
 };
+
 export default App;
 const styles = StyleSheet.create({
   container: {

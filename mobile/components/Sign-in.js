@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Keyboard,
   Text,
   View,
@@ -12,10 +13,12 @@ import {
 import { Button } from "react-native-elements";
 import deviceStorage from "../utils/jwt-storage";
 import axios from "axios";
-
+import Loader from "./Loader";
 export const SignIn = ({ setPage, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showLoader, setLoader] = useState(false);
+
   const onLoginPress = async () => {
     if (email.length === 0 || password.length === 0) {
       Alert.alert("Please input a email and password", "", [
@@ -23,66 +26,68 @@ export const SignIn = ({ setPage, history }) => {
       ]);
       return;
     }
-    const {
-      data: { token },
-    } = await axios.post("https://carinitass.herokuapp.com/api/user/login", {
-      email: email,
-      password: password,
-    });
-    if (token) {
+    setLoader(true);
+    try {
+      const {
+        data: { token },
+      } = await axios.post("https://carinitass.herokuapp.com/api/user/login", {
+        email: email,
+        password: password,
+      });
       deviceStorage.saveItem("user", token);
       history.push("/home");
-    } else {
-      console.log("no token");
+    } catch ({ response: { data } }) {
+      Alert.alert("Warning ", JSON.stringify(data), [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
     }
-
-    // response
-    // deviceStorage.saveItem("user", response.data.token);
-    //catch
-    // Alert.alert("Warning ", JSON.stringify(error.response.data), [
-    //   { text: "OK", onPress: () => console.log("OK Pressed") },
-    // ]);
+    setLoader(false);
+    return;
   };
 
   return (
     <KeyboardAvoidingView style={styles.containerView} behavior="padding">
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.loginScreenContainer}>
-          <View style={styles.loginFormView}>
-            <Text style={styles.logoText}>
-              {"\n"} Login to {"\n"}
-              Carnitas!
-            </Text>
-            <TextInput
-              placeholder="Email"
-              placeholderColor="#c4c3cb"
-              style={styles.loginFormTextInput}
-              onChangeText={(email) => setEmail(email)}
-              defaultValue={email}
-            />
-            <TextInput
-              placeholder="Password"
-              placeholderColor="#c4c3cb"
-              style={styles.loginFormTextInput}
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-              defaultValue={password}
-              onSubmitEditing={() => onLoginPress()}
-              returnKeyType="go"
-            />
+        {showLoader ? (
+          <Loader />
+        ) : (
+          <View style={styles.loginScreenContainer}>
+            <View style={styles.loginFormView}>
+              <Text style={styles.logoText}>
+                {"\n"} Login to {"\n"}
+                Carnitas!
+              </Text>
+              <TextInput
+                placeholder="Email"
+                placeholderColor="#c4c3cb"
+                style={styles.loginFormTextInput}
+                onChangeText={(email) => setEmail(email)}
+                defaultValue={email}
+              />
+              <TextInput
+                placeholder="Password"
+                placeholderColor="#c4c3cb"
+                style={styles.loginFormTextInput}
+                secureTextEntry={true}
+                onChangeText={(password) => setPassword(password)}
+                defaultValue={password}
+                onSubmitEditing={() => onLoginPress()}
+                returnKeyType="go"
+              />
 
-            <Button
-              buttonStyle={styles.loginButton}
-              onPress={() => onLoginPress()}
-              title="Login"
-            />
-            <Button
-              buttonStyle={styles.loginButton}
-              onPress={() => setPage(false)}
-              title="Sign Up"
-            />
+              <Button
+                buttonStyle={styles.loginButton}
+                onPress={() => onLoginPress()}
+                title="Login"
+              />
+              <Button
+                buttonStyle={styles.loginButton}
+                onPress={() => setPage(false)}
+                title="Sign Up"
+              />
+            </View>
           </View>
-        </View>
+        )}
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -95,12 +100,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loginScreenContainer: {
+    // backgroundColor: "red",
     flex: 1,
     alignContent: "center",
     alignItems: "center",
   },
   loginFormView: {
     width: "70%",
+    // alignContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
+
     // backgroundColor: "yellow",
     flex: 1,
   },

@@ -39,7 +39,7 @@ router.post("/register", (req, res) => {
             join_course_privilege,
             group,
           } = await newUser.save();
-          console.log(email);
+
           jwt.sign(
             {
               id: _id,
