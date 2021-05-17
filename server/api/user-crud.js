@@ -5,6 +5,7 @@ router.use(express.json());
 
 const User = require("../models/user");
 const Course = require("../models/course");
+const mongoose = require("mongoose");
 /*
 
 "/creategroup", <- user should be able to see group, and join the group
@@ -33,10 +34,11 @@ When user clicks on a course to join
 
 Requires:
 id, 
-chose_course
+chosen_course
 
-the user token will reveal the id
-the id will be used to join a course
+the client will decode the token  and have an ID
+
+the ID will be used to join a course
 https://jwt.io/  paste the bearer here and it will reveal
 {
   "id": "609c232f3a2a36099fb99119",
@@ -86,34 +88,20 @@ router.post("/joincourse/:id", async (req, res) => {
 });
 //requires user object which holds the user's courses
 router.post(
-  "/mycourses",
+  "/mycourses/:id",
   passport.authenticate("user", { session: false }),
   async (req, res) => {
     //users has courses such as {user:"bryan", courses:['123812saubd', '1293213912']}
     //courses array will be used to get the users courses
-    const user = req.body.user;
-    //if there are no course return nothing
-    if (user.course.length === 0) return res.status(200).send([]);
-    //if courses are in the array then go find the courses by id
-    let users_course = await user.course.map(async (course_id, index) => {
-      const database_course = await Course.findById(course_id);
-      return database_course;
-    });
-    //since it's finding muliple courses and storing them in a promise array
-    // then we want to reveal all the promsis and send them to the user,
 
-    Promise.all(users_course).then((data) => {
-      res.status(200).json(data);
+    const userid = req.params.id;
+    let { course } = await User.findById({ _id: userid });
+    let turnArrayIntoObjectId = course.map((c) => mongoose.Types.ObjectId(c));
+    const mycourse = await Course.find({
+      _id: { $in: turnArrayIntoObjectId },
     });
+    return res.status(200).send(mycourse);
   }
 );
-
-// router.post(
-//   "/joingroup",
-//   passport.authenticate("user", { session: false }),
-//   (req, res) => {
-//     res.send({ user: true });
-//   }
-// );
 
 module.exports = router;

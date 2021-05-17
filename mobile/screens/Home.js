@@ -9,20 +9,29 @@ import axios from "axios";
 export const Home = ({ history }) => {
   const [page, setPage] = useState({ profile: true, courses: false });
   const [user, setUser] = useState(null);
-  useEffect(() => {
-    const getJwt = async () => {
-      const jwt = await deviceStorage.loadJWT("user");
-      axios.defaults.headers.common["Authorization"] = jwt;
-      console.log("before");
-      const mycourses = await axios.get(
-        "https://carinitass.herokuapp.com/api/user/mycourses"
-      );
-      console.log("hello my courses", mycourses);
+  const [user_api_courses, setApiCourses] = useState([]);
+  useEffect(
+    () => {
+      const getJwt = async () => {
+        const jwt = await deviceStorage.loadJWT("user");
+        axios.defaults.headers.common["Authorization"] = jwt;
+        const decoded_jwt = jwt_decode(jwt);
 
-      setUser(jwt_decode(jwt));
-    };
-    getJwt();
-  }, []);
+        const {
+          data,
+        } = await axios.post(
+          "https://carinitass.herokuapp.com/api/user/mycourses",
+          { user: decoded_jwt }
+        );
+        console.log(data);
+        // setApiCourses(data);
+        setUser(decoded_jwt);
+      };
+      getJwt();
+    },
+    //Make request again when we go to profile page
+    [page.profile]
+  );
   const filterPage = (chosen_page) => {
     let newPage = { ...page };
     Object.keys(newPage).forEach((v) =>
@@ -30,10 +39,24 @@ export const Home = ({ history }) => {
     );
     setPage(newPage);
   };
+  const setCourseCallback = (add_course) => {
+    let NewAddedCourse = [...user_api_courses];
+    NewAddedCourse.push(add_course);
+    setApiCourses(NewAddedCourse);
+  };
+  console.log(user_api_courses);
   return (
     <View style={styles.container}>
-      {page.profile ? <Profile history={history} user={user} /> : null}
-      {page.courses ? <Courses user={user} /> : null}
+      {page.profile ? (
+        <Profile
+          history={history}
+          user={user}
+          user_api_courses={user_api_courses}
+        />
+      ) : null}
+      {page.courses ? (
+        <Courses setCourseCallback={setCourseCallback} user={user} />
+      ) : null}
       <TouchableOpacity
         onPress={() => filterPage("courses")}
         style={styles.box_left}

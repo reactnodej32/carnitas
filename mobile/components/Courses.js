@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { Button, Card, ListItem, Icon } from "react-native-elements";
 import axios from "axios";
 
-const Courses = ({ user = null }) => {
+const Courses = ({ user = null, setCourseCallback }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [courses, setCourses] = useState(null);
   useEffect(() => {
@@ -16,18 +16,32 @@ const Courses = ({ user = null }) => {
       });
   }, [pageNumber]);
 
+  const joinCourse = (name) => {
+    axios
+      .post(`https://carinitass.herokuapp.com/api/user/joincourse/${user.id}`, {
+        chosen_course: name,
+      })
+      .then((res) => {
+        setCourseCallback(res.data);
+      })
+      .catch((error) => {
+        Alert.alert("Warning ", JSON.stringify(error.response.data), [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.courses}>
         {courses
-          ? courses.map(({ name, stuff }, i) => (
-              <Card>
+          ? courses.map(({ name, stuff, _id }, i) => (
+              <Card key={_id}>
                 <Card.Title>{name}</Card.Title>
                 <Card.Divider />
 
                 <Text style={{ marginBottom: 10 }}>{stuff}</Text>
                 <Button
-                  onPress={() => console.log(name)}
+                  onPress={() => joinCourse(name)}
                   icon={<Icon name="code" color="#ffffff" />}
                   buttonStyle={{
                     borderRadius: 0,

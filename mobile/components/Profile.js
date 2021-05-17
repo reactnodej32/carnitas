@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Button } from "react-native-elements";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { Button, Card } from "react-native-elements";
 import deviceStorage from "../utils/jwt-storage";
 
 import { Avatar } from "react-native-elements";
 
 // backgroundColor: "#4968bf",
-const Profile = ({ history, user }) => {
+const Profile = ({ history, user, user_api_courses }) => {
   const signOut = () => {
     deviceStorage.deleteJWT();
     history.push("/");
@@ -32,6 +32,22 @@ const Profile = ({ history, user }) => {
         onPress={() => signOut()}
         title="Logout"
       />
+      <View style={{ height: "40%", width: "80%" }}>
+        <ScrollView
+        // style={{ backgroundColor: "red" }}
+        >
+          {user_api_courses.length > 0
+            ? user_api_courses.map(({ name, stuff, _id }, i) => (
+                <Card key={_id}>
+                  <Card.Title>{name}</Card.Title>
+                  <Card.Divider />
+
+                  <Text style={{ marginBottom: 10 }}>{stuff}</Text>
+                </Card>
+              ))
+            : null}
+        </ScrollView>
+      </View>
     </View>
   );
 };
