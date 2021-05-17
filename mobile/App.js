@@ -1,31 +1,24 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import axios from "axios";
-import {
-  Keyboard,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableWithoutFeedback,
-} from "react-native";
+
+import { StyleSheet, View } from "react-native";
 import { NativeRouter, Switch, Route } from "react-router-native";
 import Home from "./screens/Home";
-import SignIn from "./screens/Sign-in";
-import SignUp from "./screens/Sign-up";
-export default function App() {
+
+import Authentication from "./screens/Authentication";
+
+export const App = () => {
   return (
     <NativeRouter>
       <View style={styles.container}>
         <Switch>
-          <Route exact path="/" component={SignIn} />
-          <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/" component={Authentication} />
+          <Route exact path="/home" component={Home} />
         </Switch>
       </View>
     </NativeRouter>
   );
-}
-
+};
+export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

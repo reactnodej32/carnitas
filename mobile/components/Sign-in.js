@@ -12,26 +12,36 @@ import {
 import { Button } from "react-native-elements";
 import deviceStorage from "../utils/jwt-storage";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
-export const SignIn = ({ history }) => {
+
+export const SignIn = ({ setPage, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const onLoginPress = () => {
+  const onLoginPress = async () => {
     if (email.length === 0 || password.length === 0) {
       Alert.alert("Please input a email and password", "", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
       return;
     }
-    axios
-      .post("https://carinitass.herokuapp.com/api/user/login", {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response.data);
-        deviceStorage.saveKey("user", response.data.token);
-      });
+    const {
+      data: { token },
+    } = await axios.post("https://carinitass.herokuapp.com/api/user/login", {
+      email: email,
+      password: password,
+    });
+    if (token) {
+      deviceStorage.saveItem("user", token);
+      history.push("/home");
+    } else {
+      console.log("no token");
+    }
+
+    // response
+    // deviceStorage.saveItem("user", response.data.token);
+    //catch
+    // Alert.alert("Warning ", JSON.stringify(error.response.data), [
+    //   { text: "OK", onPress: () => console.log("OK Pressed") },
+    // ]);
   };
 
   return (
@@ -39,9 +49,12 @@ export const SignIn = ({ history }) => {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.loginScreenContainer}>
           <View style={styles.loginFormView}>
-            <Text style={styles.logoText}>Carna</Text>
+            <Text style={styles.logoText}>
+              {"\n"} Login to {"\n"}
+              Carnitas!
+            </Text>
             <TextInput
-              placeholder="Username"
+              placeholder="Email"
               placeholderColor="#c4c3cb"
               style={styles.loginFormTextInput}
               onChangeText={(email) => setEmail(email)}
@@ -57,10 +70,16 @@ export const SignIn = ({ history }) => {
               onSubmitEditing={() => onLoginPress()}
               returnKeyType="go"
             />
+
             <Button
               buttonStyle={styles.loginButton}
               onPress={() => onLoginPress()}
               title="Login"
+            />
+            <Button
+              buttonStyle={styles.loginButton}
+              onPress={() => setPage(false)}
+              title="Sign Up"
             />
           </View>
         </View>
@@ -81,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginFormView: {
-    width: "60%",
+    width: "70%",
     // backgroundColor: "yellow",
     flex: 1,
   },

@@ -28,13 +28,38 @@ router.post("/register", (req, res) => {
 
       // Hash password before saving in database
       bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
+        bcrypt.hash(newUser.password, salt, async (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
-          newUser
-            .save()
-            .then((user) => res.json(user))
-            .catch((err) => console.log(err));
+          const {
+            _id,
+            name,
+            email,
+            courses,
+            join_course_privilege,
+            group,
+          } = await newUser.save();
+          console.log(email);
+          jwt.sign(
+            {
+              id: _id,
+              name: name,
+              email: email,
+              courses: courses,
+              group: group,
+              join_course_privilege: join_course_privilege,
+            },
+            "secret",
+            {
+              expiresIn: 31556926, // 1 year in seconds
+            },
+            (err, token) => {
+              res.json({
+                success: true,
+                token: "Bearer " + token,
+              });
+            }
+          );
         });
       });
     }
