@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./server/server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "compile": "cd client && npm install && cd ../server && npm install && cd ../ && npm install && concurrently \"cd client && npm run start\" \"cd server && npm run start\""
+    "compile": "cd client && npm install && cd ../server && npm install && cd ../ && npm install && cd mobile && npm install && cd ../ && concurrently \"cd client && npm run start\" \"cd server && npm run start\" \"cd mobile && npm run start\""
   },
   "repository": {
     "type": "git",
