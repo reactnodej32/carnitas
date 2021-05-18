@@ -33,6 +33,7 @@ router.get("/course", (req, res) => {
 When user clicks on a course to join
 
 Requires:
+
 id, 
 chosen_course
 
@@ -83,10 +84,10 @@ router.post("/joincourse/:id", async (req, res) => {
     { $push: { course: course._id } },
     { new: true } // new gives the updated collection
   );
-  // RETURN THE COURSE TO UPDATE THE USERS COURSES
+  // sends the client the user's appended course
   return res.status(200).send(course);
 });
-//requires user object which holds the user's courses
+//requires user id to be inside paramas
 router.post(
   "/mycourses/:id",
   passport.authenticate("user", { session: false }),

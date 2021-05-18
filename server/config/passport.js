@@ -8,6 +8,14 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 //super secret key that we can use for now...
 opts.secretOrKey = "secret";
 
+/*
+When a user register a token is given
+during the token initalization it is defined as admin if the user register
+on the admin page.
+
+Or if the user registers within mobile the token is registered as a "user"
+*/
+
 module.exports = (passport) => {
   //passport for admin only
   passport.use(

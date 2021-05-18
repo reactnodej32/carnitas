@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  ActivityIndicator,
   Keyboard,
   Text,
   View,
@@ -26,6 +25,7 @@ export const SignIn = ({ setPage, history }) => {
       ]);
       return;
     }
+    //Since heroku is not free :/ we give the user a Spinner
     setLoader(true);
     try {
       const {
@@ -35,14 +35,17 @@ export const SignIn = ({ setPage, history }) => {
         password: password,
       });
       deviceStorage.saveItem("user", token);
+      //set the spinner to false
+      setLoader(false);
+      //Push the user to home
       history.push("/home");
     } catch ({ response: { data } }) {
       Alert.alert("Warning ", JSON.stringify(data), [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
     }
-    setLoader(false);
-    return;
+    //after the Request is done we set the spinner to false
+    return setLoader(false);
   };
 
   return (

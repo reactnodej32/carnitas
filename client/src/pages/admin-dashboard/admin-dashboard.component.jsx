@@ -45,7 +45,7 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  // for mobile usage
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -56,6 +56,7 @@ function ResponsiveDrawer(props) {
     );
     setPage(newPage);
   };
+  // Drawer is just the sidebar html
   const drawer = (
     <div>
       <div className={classes.toolbar} />

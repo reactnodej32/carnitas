@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { Button, Card, ListItem, Icon } from "react-native-elements";
 import axios from "axios";
+/*
+Paginiation is implemented here
+*/
 
 const Courses = ({ user = null, setCourseCallback }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [courses, setCourses] = useState(null);
+  // The useEffect is triggered upon every next page or previous page
+  // button clicks
+  // Thus Makes a request to api/user/course
   useEffect(() => {
     axios
       .get("https://carinitass.herokuapp.com/api/user/course", {

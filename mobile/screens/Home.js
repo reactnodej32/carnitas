@@ -6,6 +6,7 @@ import Courses from "../components/Courses";
 import deviceStorage from "../utils/jwt-storage";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
+
 export const Home = ({ history }) => {
   const [page, setPage] = useState({ profile: true, courses: false });
   const [user, setUser] = useState(null);
@@ -16,21 +17,17 @@ export const Home = ({ history }) => {
         const jwt = await deviceStorage.loadJWT("user");
         axios.defaults.headers.common["Authorization"] = jwt;
         const decoded_jwt = jwt_decode(jwt);
-
-        const {
-          data,
-        } = await axios.post(
-          "https://carinitass.herokuapp.com/api/user/mycourses",
-          { user: decoded_jwt }
+        //Use the mongoId to find the user's courses
+        const { data } = await axios.post(
+          `https://carinitass.herokuapp.com/api/user/mycourses/${decoded_jwt.id}`
         );
-        console.log(data);
-        // setApiCourses(data);
+        setApiCourses(data);
         setUser(decoded_jwt);
       };
       getJwt();
     },
     //Make request again when we go to profile page
-    [page.profile]
+    []
   );
   const filterPage = (chosen_page) => {
     let newPage = { ...page };
@@ -39,12 +36,26 @@ export const Home = ({ history }) => {
     );
     setPage(newPage);
   };
+  // When the user clicks on join a course button
+  // this callback will add the course to the user's state
+  // And rerender Profile component
   const setCourseCallback = (add_course) => {
     let NewAddedCourse = [...user_api_courses];
     NewAddedCourse.push(add_course);
     setApiCourses(NewAddedCourse);
   };
-  console.log(user_api_courses);
+  //When the user clicks on my profile button it will make a request
+  //and update the users state
+  const goToMyProfile = async () => {
+    //reload the data
+    const { data } = await axios.post(
+      `https://carinitass.herokuapp.com/api/user/mycourses/${user.id}`
+    );
+    setApiCourses(data);
+
+    filterPage("profile");
+  };
+
   return (
     <View style={styles.container}>
       {page.profile ? (
@@ -64,7 +75,7 @@ export const Home = ({ history }) => {
         <Text style={styles.box_text}>Courses</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => filterPage("profile")}
+        onPress={() => goToMyProfile()}
         style={styles.box_right}
       >
         <Text style={styles.box_text}>Profile</Text>
@@ -73,9 +84,6 @@ export const Home = ({ history }) => {
   );
 };
 
-/*
-
-*/
 export default Home;
 
 const styles = StyleSheet.create({
