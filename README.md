@@ -24,6 +24,8 @@ Jwt is implemented within client, and mobile
 
 Pagination is implemented in mobile
 
+Lazy Loading implemented in the client
+
 ## Technolgies used
 
 client: React, Redux, Redux-saga
